@@ -222,15 +222,10 @@
             canvas.height = canvasSize;
             canvas.style.width = canvasSize + 'px';
             canvas.style.height = canvasSize + 'px';
-            
-            drawMaze();
         }
 
-        // Redimensionar al cargar
+        // No dibujar aún, solo redimensionar
         resizeCanvas();
-
-        // Redimensionar cuando cambia el tamaño de la ventana
-        window.addEventListener('resize', resizeCanvas);
 
         // Definir los laberintos (1 = pared, 0 = camino)
         const mazes = [
@@ -472,6 +467,12 @@
 
         // Dibujar el laberinto al cargar
         drawMaze();
+
+        // Redimensionar cuando cambia el tamaño de la ventana
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            drawMaze();
+        });
     </script>
 </body>
 </html>
