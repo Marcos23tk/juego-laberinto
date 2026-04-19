@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles - Gestión de Fotocopiadoras</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Fotocopiadoras</h2>
+                <p>Sistema de Gestión</p>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="/dashboard" class="menu-link">📊 Dashboard</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/equipos" class="menu-link">🖨️ Equipos</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/usuarios" class="menu-link">👥 Usuarios</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/sedes" class="menu-link">🏢 Sedes</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/personal" class="menu-link">👨‍💼 Personal</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/marcas" class="menu-link">🏷️ Marcas</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/roles" class="menu-link active">🔑 Roles</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Roles</h1>
+            </div>
+
+            <div class="content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rol : ${roles}">
+                            <td th:text="${rol.id}"></td>
+                            <td th:text="${rol.nombre}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
