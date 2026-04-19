@@ -34,9 +34,7 @@
             display: block;
             margin: 10px auto;
             touch-action: none;
-            max-width: 95vw;
-            max-height: 70vh;
-            width: 100%;
+            max-width: 100%;
             height: auto;
             aspect-ratio: 1;
         }
@@ -211,8 +209,15 @@
 
         // Función para redimensionar el canvas según la pantalla
         function resizeCanvas() {
-            const maxWidth = Math.min(window.innerWidth - 40, window.innerHeight * 0.7);
-            canvasSize = Math.max(200, Math.min(maxWidth, 600));
+            // En móviles, usar el ancho de pantalla disponible
+            let screenWidth = window.innerWidth;
+            let screenHeight = window.innerHeight;
+            
+            // Restar padding y dejar espacio para controles
+            let availableWidth = Math.min(screenWidth - 20, screenHeight - 200);
+            
+            // Asegurar que el canvas sea cuadrado y tenga un tamaño razonable
+            canvasSize = Math.max(200, Math.min(availableWidth, 600));
             
             // Calcula nuevos tamaños basados en el tamaño del canvas
             cellSize = Math.floor(canvasSize / 20);
@@ -222,9 +227,11 @@
             canvas.height = canvasSize;
             canvas.style.width = canvasSize + 'px';
             canvas.style.height = canvasSize + 'px';
+            
+            console.log('Canvas redimensionado a:', canvasSize);
         }
 
-        // No dibujar aún, solo redimensionar
+        // Redimensionar cuando el DOM esté listo
         resizeCanvas();
 
         // Definir los laberintos (1 = pared, 0 = camino)
@@ -465,13 +472,29 @@
             message.style.display = 'block';
         });
 
-        // Dibujar el laberinto al cargar
-        drawMaze();
+        // Dibujar el laberinto cuando el documento esté completamente cargado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                resizeCanvas();
+                drawMaze();
+            });
+        } else {
+            resizeCanvas();
+            drawMaze();
+        }
 
         // Redimensionar cuando cambia el tamaño de la ventana
         window.addEventListener('resize', () => {
             resizeCanvas();
             drawMaze();
+        });
+
+        // Asegurar que se dibuje después de que todo esté cargado
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                resizeCanvas();
+                drawMaze();
+            }, 100);
         });
     </script>
 </body>
