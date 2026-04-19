@@ -75,6 +75,47 @@
             padding: 10px;
             border-radius: 5px;
         }
+        #responseButtons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .responseBtn {
+            width: 120px;
+            height: 50px;
+            font-size: 18px;
+            background-color: #00CED1;
+            color: #FF69B4;
+            border: 3px solid #FF69B4;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .responseBtn:hover {
+            background-color: #FF69B4;
+            color: #00CED1;
+            transform: scale(1.05);
+        }
+        .responseBtn:active {
+            transform: scale(0.95);
+        }
+        #finalMessage {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -97,7 +138,14 @@
         ⌨️ <strong>En la computadora:</strong> Usa las teclas de flecha del teclado
     </div>
     
-    <div id="message">¿Quieres ser mi enamorada?</div>
+    <div id="overlay" class="overlay"></div>
+    <div id="message">
+        <div id="finalMessage">¿Quieres ser mi enamorada?</div>
+        <div id="responseButtons">
+            <button class="responseBtn" id="yesBtn">❤️ Sí</button>
+            <button class="responseBtn" id="noBtn">💔 No</button>
+        </div>
+    </div>
 
     <script>
         const canvas = document.getElementById('mazeCanvas');
@@ -328,6 +376,25 @@
                     movePlayer(0, -1); // Arriba
                 }
             }
+        });
+
+        // Manejar respuestas de la pregunta
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            const finalMessage = document.getElementById('finalMessage');
+            finalMessage.textContent = '¡Claro que sí! 💕';
+            finalMessage.style.color = '#00CED1';
+            document.getElementById('responseButtons').style.display = 'none';
+            document.getElementById('overlay').style.display = 'block';
+            message.style.display = 'block';
+        });
+
+        document.getElementById('noBtn').addEventListener('click', () => {
+            const finalMessage = document.getElementById('finalMessage');
+            finalMessage.textContent = 'Está bien... 💔';
+            finalMessage.style.color = '#00CED1';
+            document.getElementById('responseButtons').style.display = 'none';
+            document.getElementById('overlay').style.display = 'block';
+            message.style.display = 'block';
         });
 
         drawMaze();
