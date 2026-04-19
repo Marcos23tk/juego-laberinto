@@ -16,6 +16,9 @@
         canvas {
             border: 2px solid #FF69B4; /* Rosa */
             background-color: #F0F8FF; /* Azul claro para contraste */
+            display: block;
+            margin: 20px auto;
+            touch-action: none;
         }
         #message {
             display: none;
@@ -25,14 +28,52 @@
             transform: translate(-50%, -50%);
             background-color: #FF69B4; /* Rosa */
             color: #00CED1; /* Turquesa */
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
-            font-size: 24px;
+            font-size: 28px;
             z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
         #level {
             font-size: 20px;
             margin-bottom: 10px;
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            background-color: #FF69B4;
+            color: #00CED1;
+            border: 2px solid #00CED1;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        button:active {
+            background-color: #FF1493;
+            transform: scale(0.95);
+        }
+        button:hover {
+            background-color: #FF1493;
+        }
+        .spacer {
+            width: 60px;
+        }
+        #instructions {
+            font-size: 14px;
+            margin-top: 20px;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -40,6 +81,22 @@
     <h1>Juego del Laberinto Romántico</h1>
     <div id="level">Nivel: 1</div>
     <canvas id="mazeCanvas" width="400" height="400"></canvas>
+    
+    <div id="controls">
+        <div class="spacer"></div>
+        <button id="upBtn">⬆️</button>
+        <div class="spacer"></div>
+        <br>
+        <button id="leftBtn">⬅️</button>
+        <button id="downBtn">⬇️</button>
+        <button id="rightBtn">➡️</button>
+    </div>
+    
+    <div id="instructions">
+        📱 <strong>En el celular:</strong> Toca los botones de flechas o desliza tu dedo en el laberinto<br>
+        ⌨️ <strong>En la computadora:</strong> Usa las teclas de flecha del teclado
+    </div>
+    
     <div id="message">¿Quieres ser mi enamorada?</div>
 
     <script>
@@ -228,6 +285,48 @@
                 case 'ArrowRight':
                     movePlayer(1, 0);
                     break;
+            }
+        });
+
+        // Botones de control táctil
+        document.getElementById('upBtn').addEventListener('click', () => movePlayer(0, -1));
+        document.getElementById('downBtn').addEventListener('click', () => movePlayer(0, 1));
+        document.getElementById('leftBtn').addEventListener('click', () => movePlayer(-1, 0));
+        document.getElementById('rightBtn').addEventListener('click', () => movePlayer(1, 0));
+
+        // Detectar gestos de deslizamiento (swipe) en el canvas
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Determinar dirección del swipe (umbral mínimo de 30 píxeles)
+            const threshold = 30;
+            
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Movimiento horizontal
+                if (deltaX > threshold) {
+                    movePlayer(1, 0); // Derecha
+                } else if (deltaX < -threshold) {
+                    movePlayer(-1, 0); // Izquierda
+                }
+            } else {
+                // Movimiento vertical
+                if (deltaY > threshold) {
+                    movePlayer(0, 1); // Abajo
+                } else if (deltaY < -threshold) {
+                    movePlayer(0, -1); // Arriba
+                }
             }
         });
 
